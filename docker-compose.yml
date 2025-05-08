@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  paper-extractor:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "7860:7860"
+    volumes:
+      - ./model-dir:/app/model-dir
+      - ./output:/app/output
+    environment:
+      - MODEL_PATH=/app/model-dir
+      - OUTPUT_DIR=/app/output
+      - TRANSFORMERS_OFFLINE=1
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
